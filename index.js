@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
-const pool = require("./db");
+const client = require("./db");
 const path = require("path");
 const PORT = process.env.PORT || 5000;
 
@@ -28,75 +28,77 @@ console.log(path.join(__dirname, "client/build"));
 
 //get all Todos
 
-app.get("/todos", async (req, res) => {
+app.post("/list", async (req, res) => {
   try {
-    const allTodos = await pool.query("SELECT * FROM todo");
-
-    res.json(allTodos.rows);
-  } catch (err) {
-    console.error(err.message);
-  }
-});
-
-//get a todo
-
-app.get("/todos/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const todo = await pool.query("SELECT * FROM todo WHERE todo_id = $1", [
-      id,
-    ]);
-    res.json(todo.rows[0]);
-  } catch (err) {
-    console.error(err.message);
-  }
-});
-
-//create a todo
-
-app.post("/todos", async (req, res) => {
-  try {
-    console.log(req.body);
-    const { description } = req.body;
-    const newTodo = await pool.query(
-      "INSERT INTO todo (description) VALUES ($1) RETURNING *",
-      [description]
+    const { muscles_trained } = req.body;
+    const list = await client.query(
+      "INSERT INTO plan (muscles_trained) VALUES($1) RETURNING *",
+      [muscles_trained]
     );
-
-    res.json(newTodo.rows[0]);
+    console.log("success")
+    res.json(list.rows[0]);
   } catch (err) {
-    console.error(err.message);
+    res.status(500).send(err)
   }
 });
 
-//update a todo
+//get the list
 
-app.put("/todos/:id", async (req, res) => {
+app.get("/list", async (req, res) => {
+  console.log("trying")
   try {
-    const { id } = req.params;
-    const { description } = req.body;
-    const updateTodo = await pool.query(
-      "UPDATE todo SET description = $1 WHERE todo_id = $2",
-      [description, id]
-    );
-
-    res.json("Todo was updated");
+    const list = await client.query('SELECT * FROM plan ORDER BY session_id');
+    console.log("trying")
+    res.json(list.rows);
+    console.log("success")
   } catch (err) {
-    console.error(err.message);
+    console.error(err)
+    res.status(500).send(err)
   }
 });
 
-//delete a todo
+//get the session by id
 
-app.delete("/todos/:id", async (req, res) => {
+app.get("/list/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const deleteTodo = await pool.query("DELETE FROM todo WHERE todo_id = $1", [
-      id,
+    const session = await client.query("SELECT * FROM plan WHERE session_id = $1", [
+      id
     ]);
-    res.json("Todo was deleted");
+
+    res.json(session.rows[0]);
   } catch (err) {
     console.error(err.message);
+  }
+});
+
+//update muscles_trained ONLY session
+
+app.put("/list/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { muscles_trained } = req.body;
+    const updateSession = await client.query(
+      "UPDATE plan SET muscles_trained = $1 WHERE session_id = $2",
+      [muscles_trained, id]
+    );
+    res.json("Muscles_trained category was updated!");
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+//delete a session
+
+app.delete("/list/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deleteSession = await client.query("DELETE FROM plan WHERE session_id = $1", [
+      id
+    ]);
+    res.json("Session was deleted!");
+  } catch (err) {
+    console.log(err.message);
   }
 });
 

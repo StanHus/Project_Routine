@@ -1,15 +1,15 @@
-import React, { Fragment } from "react";
-import InputTodo from "./components/InputTodo";
-import ListTodos from "./components/ListTodos";
-import "./App.css";
+import { Fragment } from "react";
+import InputSession from "./components/InputSession";
+import ListSessions from "./components/ListSessions";
+import "./css/style.css"
 
 function App() {
   return (
     <Fragment>
-      <div className="container">
-        <InputTodo />
-        <ListTodos />
+      <div className = "input">
+        <InputSession />
       </div>
+        <ListSessions />
     </Fragment>
   );
 }
