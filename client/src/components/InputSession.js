@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import React, { Fragment, useState } from "react";
 import "../css/style.css"
 
 const InputSession = () => {
@@ -8,7 +8,7 @@ const InputSession = () => {
     e.preventDefault();
     try {
       const body = { muscles_trained};
-      const response = await fetch("/list", {
+      const response = await fetch("http://localhost:5000/list", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body)

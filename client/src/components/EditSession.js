@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import React, { Fragment, useState } from "react";
 
 const EditSession = ({session}) => {
   const [muscles_trained, setMuscles_trained] = useState(session.muscles_trained);
@@ -10,7 +10,7 @@ const EditSession = ({session}) => {
     try {
       const body = { muscles_trained };
       const response = await fetch(
-        `/list/${session.session_id}`,
+        `http://localhost:5000/list/${session.session_id}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },

@@ -28,7 +28,7 @@ console.log(path.join(__dirname, "client/build"));
 
 //get all Todos
 
-app.post("/list", async (req, res) => {
+app.post("http://localhost/list", async (req, res) => {
   try {
     const { muscles_trained } = req.body;
     const list = await client.query(
@@ -44,8 +44,7 @@ app.post("/list", async (req, res) => {
 
 //get the list
 
-app.get("/list", async (req, res) => {
-  console.log("trying")
+app.get("http://localhost/list", async (req, res) => {
   try {
     const list = await client.query('SELECT * FROM plan ORDER BY session_id');
     console.log("trying")
@@ -59,7 +58,7 @@ app.get("/list", async (req, res) => {
 
 //get the session by id
 
-app.get("/list/:id", async (req, res) => {
+app.get("http://localhost:5000/list/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const session = await client.query("SELECT * FROM plan WHERE session_id = $1", [
@@ -74,7 +73,7 @@ app.get("/list/:id", async (req, res) => {
 
 //update muscles_trained ONLY session
 
-app.put("/list/:id", async (req, res) => {
+app.put("http://localhost:5000/list/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const { muscles_trained } = req.body;
@@ -90,7 +89,7 @@ app.put("/list/:id", async (req, res) => {
 
 //delete a session
 
-app.delete("/list/:id", async (req, res) => {
+app.delete("http://localhost:5000/list/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const deleteSession = await client.query("DELETE FROM plan WHERE session_id = $1", [

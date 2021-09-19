@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 
 import EditSession from "./EditSession";
 import "../css/style.css"
@@ -10,7 +10,7 @@ const ListSessions = () => {
 
   const deleteSession = async (id) => {
     try {
-      const deletSession = await fetch(`/list/${id}`, {
+      const deletSession = await fetch(`http://localhost:5000/list/${id}`, {
         method: "DELETE"
       });
 
@@ -22,7 +22,7 @@ const ListSessions = () => {
 
   const getSessions = async () => {
     try {
-      const response = await fetch("/list");
+      const response = await fetch("http://localhost:5000/list");
       const jsonData = await response.json();
 
       setSessions(jsonData);
