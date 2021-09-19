@@ -2,8 +2,7 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const client = require("./db");
-const path = require("path");
-const PORT = process.env.PORT || 5000;
+//const PORT = process.env.PORT || 5000;
 
 //process.env.PORT
 //process.env.NODE_ENV => production or undefined
@@ -15,20 +14,17 @@ app.use(express.json()); // => allows us to access the req.body
 // app.use(express.static(path.join(__dirname, "client/build")));
 // app.use(express.static("./client/build")); => for demonstration
 
-if (process.env.NODE_ENV === "production") {
-  //server static content
-  //npm run build
-  app.use(express.static(path.join(__dirname, "client/build")));
-}
+// if (process.env.NODE_ENV === "production") {
+//   //server static content
+//   //npm run build
+//   app.use(express.static(path.join(__dirname, "client/build")));
+// }
 
-console.log(__dirname);
-console.log(path.join(__dirname, "client/build"));
+// console.log(__dirname);
+// console.log(path.join(__dirname, "client/build"));
 
-//ROUTES//
 
-//get all Todos
-
-app.post("http://localhost/list", async (req, res) => {
+app.post("http://localhost:5000/list", async (req, res) => {
   try {
     const { muscles_trained } = req.body;
     const list = await client.query(
@@ -44,10 +40,10 @@ app.post("http://localhost/list", async (req, res) => {
 
 //get the list
 
-app.get("http://localhost/list", async (req, res) => {
+app.get("http://localhost:5000/list", async (req, res) => {
+  console.log("trying")
   try {
     const list = await client.query('SELECT * FROM plan ORDER BY session_id');
-    console.log("trying")
     res.json(list.rows);
     console.log("success")
   } catch (err) {
@@ -101,10 +97,10 @@ app.delete("http://localhost:5000/list/:id", async (req, res) => {
   }
 });
 
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "client/build/index.html"));
-});
+// app.get("*", (req, res) => {
+//   res.sendFile(path.join(__dirname, "client/build/index.html"));
+// });
 
-app.listen(PORT, () => {
-  console.log(`Server is starting on port ${PORT}`);
+app.listen(5000, () => {
+  console.log(`Server is starting on port 5000`);
 });
